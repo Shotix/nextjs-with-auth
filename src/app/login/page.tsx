@@ -19,7 +19,7 @@ const LoginPage: React.FC = () => {
                 setError(response.message);
             }
         } catch {
-            setError("Unexpected error occurred");
+            setError("There was an error logging in");
         }
     };
 

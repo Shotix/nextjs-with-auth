@@ -1,4 +1,4 @@
-import {ApiErrorResponse} from "@/data/ApiErrorResponse";
+import { ApiErrorResponse } from "@/data/ApiErrorResponse";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 
@@ -33,7 +33,7 @@ export default class NetworkController {
             if (token) {
                 defaultHeaders["Authorization"] = `Bearer ${token}`;
             } else {
-                throw new Error("JWT token is required but not found.");
+                throw new ApiErrorResponse("authentication.token.missing", 401, "", []);
             }
         }
 
@@ -74,6 +74,10 @@ export default class NetworkController {
             return responseData;
         } catch (error) {
             console.error("Request failed:", error);
+            // If the error is a network error (e.g., no internet) we wrap it in our ApiErrorResponse type
+            if (error instanceof TypeError && error.message.includes("Failed to fetch")) {
+                throw new ApiErrorResponse("network.error", 0, "", []);
+            }
             throw error;
         }
     }

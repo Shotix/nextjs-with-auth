@@ -33,6 +33,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             getUserData().then(() => {
                 setIsAuthenticated(true);
                 setAuthToken(token);
+                setLoading(false);
             });
         } else {
             setIsAuthenticated(false);
@@ -45,6 +46,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const getUserData = async () => {
         try {
             const response = await fetchUserData();
+            if (response instanceof ApiErrorResponse) {
+                setIsAuthenticated(false);
+                setAuthToken(null);
+                setUser(null);
+                setLoading(false);
+
+                throw new Error(response.message);
+            }
             const user = response.data;
             setUser(user);
         } catch {
@@ -57,11 +66,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     }
 
-    const login = async (username: string, password: string): Promise<ApiResponse<string> | ApiErrorResponse> => {
+    const login = async (
+        username: string,
+        password: string
+    ): Promise<ApiResponse<string> | ApiErrorResponse> => {
         try {
             setLoginLoading(true);
             const response = await loginRequest(username, password);
             if (response instanceof ApiErrorResponse) {
+                setLoginLoading(false);
                 return response;
             }
             const token = response.data;

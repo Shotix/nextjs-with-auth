@@ -1,7 +1,9 @@
-import {ApiResponse, User} from "@/data/interfaces";
-import {ApiErrorResponse} from "@/data/ApiErrorResponse";
-import NetworkController from "@/utils/NetworkController";
 
+
+import { getUserFriendlyError } from "@/utils/errorMapper";
+import { ApiErrorResponse } from "@/data/ApiErrorResponse";
+import NetworkController from "@/utils/NetworkController";
+import {ApiResponse, User} from "@/data/interfaces";
 
 export async function loginRequest(
     username: string,
@@ -15,16 +17,16 @@ export async function loginRequest(
             url: "/api/v1/users/login",
             method: "POST",
             body: { username, password },
-            needJwtToken: false
+            needJwtToken: false,
         });
     } catch (error) {
-        if (error instanceof Response) {
-            const errorResponse = await error.json();
+        if (error instanceof ApiErrorResponse) {
+            const userFriendlyMessage = getUserFriendlyError(error.message);
             return new ApiErrorResponse(
-                errorResponse.message,
-                errorResponse.statusCode,
-                errorResponse.instance,
-                errorResponse.errors
+                userFriendlyMessage,
+                error.statusCode,
+                error.instance,
+                error.errors
             );
         } else {
             throw error;
@@ -33,10 +35,24 @@ export async function loginRequest(
 }
 
 
-export async function fetchUserData(): Promise<ApiResponse<User>> {
-    return NetworkController.request<ApiResponse<User>>({
-        url: "/api/user",
-        method: "GET",
-        needJwtToken: true
-    })
+export async function fetchUserData(): Promise<ApiResponse<User> | ApiErrorResponse> {
+    try {
+        return await NetworkController.request<ApiResponse<User>>({
+            url: "/api/v1/users/me",
+            method: "GET",
+            needJwtToken: true,
+        });
+    } catch (error) {
+        if (error instanceof ApiErrorResponse) {
+            const userFriendlyMessage = getUserFriendlyError(error.message);
+            return new ApiErrorResponse(
+                userFriendlyMessage,
+                error.statusCode,
+                error.instance,
+                error.errors
+            );
+        } else {
+            throw error;
+        }
+    }
 }
