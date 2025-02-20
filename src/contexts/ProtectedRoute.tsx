@@ -9,7 +9,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 
     useEffect(() => {
         if (!loading && !isAuthenticated) {
-            if (!pathname.startsWith("/login")) {
+            if (!pathname.startsWith("/login") && !pathname.startsWith("/register")) {
                 router.push("/login");
             }
         }
@@ -19,7 +19,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
         return <p>Loading...</p>
     }
 
-    if (!isAuthenticated && pathname === "/login") {
+    if (!isAuthenticated && pathname === "/login" || pathname === "/register") {
         return <>{children}</>;
     }
 

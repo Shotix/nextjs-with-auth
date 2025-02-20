@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, {useEffect} from "react";
 import {useAuth} from "@/contexts/AuthContext";
 import {ApiErrorResponse} from "@/data/ApiErrorResponse";
 
@@ -9,6 +9,15 @@ const LoginPage: React.FC = () => {
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [error, setError] = React.useState<string | null>(null);
+    const [loginButtonEnabled, setLoginButtonEnabled] = React.useState(false);
+
+    useEffect(() => {
+        if (username.length === 0 || password.length === 0 || loginLoading) {
+            setLoginButtonEnabled(false);
+        } else {
+            setLoginButtonEnabled(true);
+        }
+    }, []);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -24,7 +33,7 @@ const LoginPage: React.FC = () => {
     };
 
     return (
-        <>
+        <div className={"form-container"}>
             <form onSubmit={handleLogin}>
                 <div className={"form-header"}>
                     <h1>Login</h1>
@@ -34,6 +43,7 @@ const LoginPage: React.FC = () => {
                         Username
                         <input
                             type="text"
+                            className={username.length === 0 ? "invalid" : ""}
                             placeholder="Enter your username"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
@@ -43,6 +53,7 @@ const LoginPage: React.FC = () => {
                         Password
                         <input
                             type="password"
+                            className={password.length === 0 ? "invalid" : ""}
                             placeholder="Enter your password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -51,7 +62,7 @@ const LoginPage: React.FC = () => {
                 </div>
                 
                 <div className={"form-actions"}>
-                    <button type="submit" disabled={loginLoading}>
+                    <button type="submit" disabled={!loginButtonEnabled}>
                         {loginLoading ? "Logging in..." : "Login"}
                     </button>
                 </div>
@@ -60,7 +71,11 @@ const LoginPage: React.FC = () => {
                     {error && <p>{error}</p>}
                 </div>
             </form>
-        </>
+            
+            <div className={"form-additional-actions"}>
+                <a href="/register">Don&#39;t have an account? Register</a>
+            </div>
+        </div>
     );
 };
 

@@ -13,6 +13,57 @@ form {
     margin: 0 20px;
 }
 
+/* Container styling */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .form-container {
+        padding: 10px;
+    }
+
+    form {
+        padding: 2rem;
+    }
+}
+
+@media (max-height: 600px) {
+    .form-container {
+        align-items: flex-start;
+    }
+
+    form {
+        margin-top: 20px;
+    }
+}
+
+/* Additional actions styling */
+.form-additional-actions {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.form-additional-actions a {
+    color: #777777;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.3s ease-in-out;
+}
+
+.form-additional-actions a:hover {
+    color: var(--secondary-color);
+    text-decoration: underline;
+}
+
 /* Header Section */
 .form-header {
     margin-bottom: 1.5rem;
@@ -68,29 +119,70 @@ form {
 }
 
 .form-actions button {
+    position: relative;
+    z-index: 0;
     width: 100%;
     padding: 16px;
     font-size: 1rem;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    overflow: hidden;
+    /* When enabled, the button itself is transparent so the gradient layer shows */
+    background: transparent;
     color: var(--light-color);
     font-weight: bold;
     box-shadow: 0 3px 15px rgba(79, 70, 229, 0.3);
     letter-spacing: 0.5px;
-}
-
-.form-actions button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 3px 25px rgba(79, 70, 229, 0.5);
-    background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 .form-actions button:disabled {
+    /* When disabled, display a solid gray background */
     background: #777;
     cursor: not-allowed;
+}
+
+/* Ensure pseudo-elements are hidden when disabled */
+.form-actions button:disabled::before,
+.form-actions button:disabled::after {
+    opacity: 0;
+}
+
+/* Base gradient layer (normal state) */
+.form-actions button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    z-index: -1;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 1;
+}
+
+/* Hover gradient layer (swapped colors) */
+.form-actions button::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+    z-index: -1;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0;
+}
+
+/* On hover, fade in the ::after layer while fading out the ::before layer */
+.form-actions button:hover::after {
+    opacity: 1;
+}
+.form-actions button:hover::before {
+    opacity: 0;
 }
 
 /* Footer Section */
@@ -98,4 +190,9 @@ form {
     color: var(--accent-color);
     font-size: 0.9rem;
     margin-top: 0.5rem;
+}
+
+
+.invalid {
+    border: 1px solid red !important;
 }
