@@ -1,13 +1,13 @@
 # NextJS / React Starter Project
 
-This project serves as a basic starter template for a NextJS / React application that includes login and register functionality. It is designed to work seamlessly with the backend project named `springboot-with-auth`.
+This project serves as a basic starter template for a NextJS / React application that includes login and register functionality. It is designed to work seamlessly with my backend project named [springboot-with-auth](https://github.com/Shotix/springboot-with-auth).
 
 ## Features
 
 - **NextJS**: A React framework for server-side rendering and static site generation.
 - **React**: A JavaScript library for building user interfaces.
 - **Authentication**: Login and register functionality integrated with the backend.
-- **Seamless Integration**: Designed to work with the `springboot-with-auth` backend project.
+- **Seamless Integration**: Designed to work with my [springboot-with-auth](https://github.com/Shotix/springboot-with-auth) project
 
 ## Getting Started
 
@@ -49,14 +49,15 @@ This project serves as a basic starter template for a NextJS / React application
 
 ## Project Structure
 
-- `pages/`: Contains the NextJS pages.
-- `components/`: Contains the React components.
-- `styles/`: Contains the CSS styles.
-- `public/`: Contains the public assets.
+- `app/`: Contains the main frontend code (pages, components, styles, etc.).
+- `contexts/`: Contains the React contexts.
+- `data/`: Contains the data models.
+- `services/`: Contains the API services.
+- `utils/`: Contains utility functions.
 
 ## Backend Integration
 
-This project is designed to work with the `springboot-with-auth` backend project. Make sure to set up and run the backend project to enable the authentication functionality.
+This project is designed to work with my [springboot-with-auth](https://github.com/Shotix/springboot-with-auth) backend project. Make sure to set up and run the backend project to enable the authentication functionality.
 
 ## Contributing
 
