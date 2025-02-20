@@ -55,6 +55,8 @@ export default class NetworkController {
             console.log("Response Headers:", response.headers);
 
             if (!response.ok) {
+                console.error("Response with error status:", response);
+                
                 const errorResponse = await response.json();
                 throw new ApiErrorResponse(
                     errorResponse.message,
@@ -71,6 +73,7 @@ export default class NetworkController {
             console.error("Request failed:", error);
             
             if (error instanceof TypeError && error.message.includes("Load failed")) {
+                console.log("Network error");
                 throw new ApiErrorResponse("network.error", 0, "", []);
             }
             throw error;

@@ -1,8 +1,11 @@
 "use client";
 
 import React, {useEffect} from "react";
+import {ApiErrorResponse} from "@/data/ApiErrorResponse";
+import {useAuth} from "@/contexts/AuthContext";
 
 const RegisterPage: React.FC = () => {
+    const { register, registerLoading } = useAuth();
     const [username, setUsername] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
@@ -10,7 +13,6 @@ const RegisterPage: React.FC = () => {
     const [passwordsMatch, setPasswordsMatch] = React.useState(false);
     const [registerButtonEnabled, setRegisterButtonEnabled] = React.useState(false);
     const [error, setError] = React.useState<string | null>(null);
-    const [registerLoading, setRegisterLoading] = React.useState(false);
     const [isEmailValid, setIsEmailValid] = React.useState(false);
     const [isUsernameValid, setIsUsernameValid] = React.useState(false);
 
@@ -54,16 +56,13 @@ const RegisterPage: React.FC = () => {
             return;
         }
 
-        setRegisterLoading(true);
-
         try {
-            // Replace with your actual register API call
-            console.log("Registering user:", { username, email, password });
-            // Simulate successful registration
-            setRegisterLoading(false);
+            const response = await register(username, email, password);
+            if (response instanceof ApiErrorResponse) {
+                setError(response.message);
+            }
         } catch {
-            setRegisterLoading(false);
-            setError("Registration failed. Please try again.");
+            setError("There was an error logging in");
         }
     };
 

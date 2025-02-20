@@ -2,6 +2,7 @@
 @import "./css/variables.css";
 @import "./css/forms.css";
 @import "./css/keyframes.css";
+@import "./css/customButton.css";
 
 @tailwind base;
 @tailwind components;

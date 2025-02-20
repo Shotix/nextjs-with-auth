@@ -17,7 +17,7 @@ const LoginPage: React.FC = () => {
         } else {
             setLoginButtonEnabled(true);
         }
-    }, []);
+    }, [loginLoading, password.length, username.length]);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
