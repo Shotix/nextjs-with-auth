@@ -3,6 +3,7 @@
 import React from "react";
 import {AuthProvider} from "@/contexts/AuthContext";
 import ProtectedRoute from "@/contexts/ProtectedRoute";
+import "./globals.css"
 
 export default function RootLayout({
   children,

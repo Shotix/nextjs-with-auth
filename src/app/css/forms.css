@@ -1,0 +1,101 @@
+/* forms.css */
+form {
+    background: var(--form-bg);
+    backdrop-filter: blur(15px);
+    padding: 3rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    animation: fadeIn 0.8s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    margin: 0 20px;
+}
+
+/* Header Section */
+.form-header {
+    margin-bottom: 1.5rem;
+}
+
+.form-header h1 {
+    color: var(--foreground);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Input Section */
+.form-input {
+    margin-bottom: 1.5rem;
+}
+
+.form-input label {
+    display: block;
+    text-align: left;
+    color: var(--foreground);
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+}
+
+.form-input input {
+    width: 100%;
+    padding: 16px;
+    margin-bottom: 1.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: var(--input-bg);
+    color: var(--foreground);
+    outline: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.form-input input::placeholder {
+    color: var(--border-color);
+}
+
+.form-input input:focus {
+    background: var(--input-focus-bg);
+    transform: scale(1.02);
+    border: 1px solid var(--border-color);
+}
+
+/* Actions Section */
+.form-actions {
+    margin-bottom: 1.5rem;
+}
+
+.form-actions button {
+    width: 100%;
+    padding: 16px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    color: var(--light-color);
+    font-weight: bold;
+    box-shadow: 0 3px 15px rgba(79, 70, 229, 0.3);
+    letter-spacing: 0.5px;
+}
+
+.form-actions button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 3px 25px rgba(79, 70, 229, 0.5);
+    background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+}
+
+.form-actions button:disabled {
+    background: #777;
+    cursor: not-allowed;
+}
+
+/* Footer Section */
+.form-footer p {
+    color: var(--accent-color);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}

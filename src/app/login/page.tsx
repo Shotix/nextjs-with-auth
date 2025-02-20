@@ -22,34 +22,46 @@ const LoginPage: React.FC = () => {
             setError("Unexpected error occurred");
         }
     };
-    
+
     return (
         <>
-            <h1>Login</h1>
             <form onSubmit={handleLogin}>
-                <label>
-                    Username
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                    />
-                </label>
-                <label>
-                    Password
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </label>
-                <button type="submit" disabled={loginLoading}>
-                    {loginLoading ? "Logging in..." : "Login"}
-                </button>
-                {error && <p>{error}</p>}
+                <div className={"form-header"}>
+                    <h1>Login</h1>
+                </div>
+                <div className={"form-input"}>
+                    <label>
+                        Username
+                        <input
+                            type="text"
+                            placeholder="Enter your username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
+                    </label>
+                    <label>
+                        Password
+                        <input
+                            type="password"
+                            placeholder="Enter your password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </label>
+                </div>
+                
+                <div className={"form-actions"}>
+                    <button type="submit" disabled={loginLoading}>
+                        {loginLoading ? "Logging in..." : "Login"}
+                    </button>
+                </div>
+                
+                <div className={"form-footer"}>
+                    {error && <p>{error}</p>}
+                </div>
             </form>
         </>
-    )
+    );
 };
 
 export default LoginPage;
