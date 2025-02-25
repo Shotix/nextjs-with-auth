@@ -1,4 +1,5 @@
 import { ApiErrorResponse } from "@/data/ApiErrorResponse";
+import {accessToken} from "@/utils/authStore";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 
@@ -28,9 +29,8 @@ export default class NetworkController {
         };
         
         if (needJwtToken) {
-            const token = localStorage.getItem("authToken");
-            if (token) {
-                defaultHeaders["Authorization"] = `Bearer ${token}`;
+            if (accessToken) {
+                defaultHeaders["Authorization"] = `Bearer ${accessToken}`;
             } else {
                 throw new ApiErrorResponse("authentication.token.missing", 401, "", []);
             }
@@ -39,6 +39,7 @@ export default class NetworkController {
         const options: RequestInit = {
             method,
             headers: { ...defaultHeaders, ...headers },
+            credentials: "include",
         };
 
         if (body) {
