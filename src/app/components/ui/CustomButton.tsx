@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import "@/app/css/customButton.css";
 
 interface CustomButtonProps {
     label: string;
