@@ -44,7 +44,7 @@ const RegisterPage: React.FC = () => {
             setRegisterButtonEnabled(true);
         }
         
-    }, [confirmPassword, email.length, password, passwordsMatch, registerLoading, username.length]);
+    }, [confirmPassword, email, email.length, isEmailValid, isUsernameValid, password, passwordsMatch, registerLoading, username.length]);
     
 
     const handleRegister = async (e: React.FormEvent) => {
