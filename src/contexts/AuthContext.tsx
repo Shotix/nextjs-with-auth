@@ -2,17 +2,20 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import {fetchUserData, loginRequest, registerRequest} from "@/services/userData";
-import {ApiErrorResponse} from "@/data/ApiErrorResponse";
-import {ApiResponse} from "@/data/interfaces";
+import { fetchUserData, loginRequest, registerRequest } from "@/services/userData";
+import { ApiErrorResponse } from "@/data/ApiErrorResponse";
+import { ApiResponse } from "@/data/interfaces";
+import { setAccessToken as setGlobalAccessToken } from "@/utils/authStore";
+import {refreshAccessTokenRequest} from "@/services/authenticationRequests";
 
 interface AuthContextType {
     isAuthenticated: boolean;
     user: { username: string } | null;
     loading: boolean;
-    authToken: string | null;
+    accessToken: string | null;
     login: (username: string, password: string) => Promise<ApiResponse<string> | ApiErrorResponse>;
     register: (username: string, email: string, password: string) => Promise<ApiResponse<string> | ApiErrorResponse>;
+    refreshAccessToken: () => Promise<boolean>;
     loginLoading: boolean;
     registerLoading: boolean;
     logout: () => void;
@@ -22,28 +25,22 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [authToken, setAuthToken] = useState<string | null>(null);
+    const [accessToken, setAccessToken] = useState<string | null>(null);
     const [user, setUser] = useState<{ username: string } | null>(null);
     const [loading, setLoading] = useState(true);
     const [loginLoading, setLoginLoading] = useState(false);
     const [registerLoading, setRegisterLoading] = useState(false);
     const router = useRouter();
 
-    useEffect(() => {
-        // Get the authentication token from the local storage
-        const token = localStorage.getItem("authToken");
-        if (token) {
-            getUserData().then(() => {
+
+   useEffect(() => {
+        refreshAccessToken().then(success => {
+            if (success) {
                 setIsAuthenticated(true);
-                setAuthToken(token);
-                setLoading(false);
-            });
-        } else {
-            setIsAuthenticated(false);
-            setAuthToken(null);
-            setUser(null);
-            setLoading(false)
-        }
+                getUserData().then(() => console.log("User data loaded"));
+            }
+            setLoading(false);
+        });
     }, []);
 
     const getUserData = async (): Promise<void> => {
@@ -53,8 +50,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 handleAuthError(response.message);
                 return;
             }
-            const user = response.data;
-            setUser(user);
+            const userData = response.data;
+            setUser(userData);
         } catch {
             handleAuthError("There was an error getting the user data");
         }
@@ -62,11 +59,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const handleAuthError = (message: string): void => {
         setIsAuthenticated(false);
-        setAuthToken(null);
+        setAccessToken(null);
         setUser(null);
         setLoading(false);
         setLoginLoading(false);
         setRegisterLoading(false);
+        setGlobalAccessToken(null);
         console.error("Auth error: ", message);
     };
 
@@ -78,19 +76,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setLoginLoading(true);
             const response = await loginRequest(username, password);
             if (response instanceof ApiErrorResponse) {
-                console.log("We have an error of type ApiErrorResponse");
-                handleAuthError(response.message)
+                handleAuthError(response.message);
+                setLoginLoading(false);
                 return response;
             }
             const token = response.data;
-            localStorage.setItem("authToken", token);
-            setAuthToken(token);
+            setAccessToken(token);
+            setGlobalAccessToken(token);
             setIsAuthenticated(true);
-
             await getUserData();
-
             setLoginLoading(false);
-            router.push("/")
+            router.push("/");
             return response;
         } catch (error) {
             setLoginLoading(false);
@@ -100,7 +96,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             throw new Error(error instanceof Error ? error.message : "Error logging in");
         }
     };
-    
+
     const register = async (
         username: string,
         email: string,
@@ -111,17 +107,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const response = await registerRequest(username, email, password);
             if (response instanceof ApiErrorResponse) {
                 handleAuthError(response.message);
+                setRegisterLoading(false);
                 return response;
             }
             const token = response.data;
-            localStorage.setItem("authToken", token);
-            setAuthToken(token);
+            setAccessToken(token);
+            setGlobalAccessToken(token);
             setIsAuthenticated(true);
-
             await getUserData();
-
             setRegisterLoading(false);
-            router.push("/")
+            router.push("/");
             return response;
         } catch (error) {
             setRegisterLoading(false);
@@ -132,16 +127,48 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
     
+    const refreshAccessToken = async (): Promise<boolean> => {
+        try {
+            const res = await refreshAccessTokenRequest();
+            if (!res) {
+                setAccessToken(null);
+                setIsAuthenticated(false);
+                return false;
+            }
+            setAccessToken(res);
+            setGlobalAccessToken(res);
+            return true;
+        } catch (error) {
+            console.error("Refresh access token error:", error);
+            setAccessToken(null);
+            setIsAuthenticated(false);
+            return false;
+        }
+    };
+
     const logout = () => {
-        localStorage.removeItem("authToken");
-        setAuthToken(null);
+        setAccessToken(null);
+        setGlobalAccessToken(null);
         setIsAuthenticated(false);
         setUser(null);
         router.push("/");
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, authToken, user, loading, login, register, loginLoading, registerLoading, logout }}>
+        <AuthContext.Provider
+            value={{
+                isAuthenticated,
+                accessToken,
+                user,
+                loading,
+                login,
+                register,
+                refreshAccessToken,
+                loginLoading,
+                registerLoading,
+                logout,
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );
