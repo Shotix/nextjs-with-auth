@@ -34,16 +34,15 @@ export async function loginRequest(
     }
 }
 
-
 export async function registerRequest(
-    username: string, 
+    username: string,
     email: string,
     password: string
 ): Promise<ApiResponse<string> | ApiErrorResponse> {
     try {
         return await NetworkController.request<ApiResponse<string>>({
             headers: {
-               
+
             },
             url: "/api/v1/users/register",
             method: "POST",
@@ -65,8 +64,7 @@ export async function registerRequest(
     }
 }
 
-
-export async function fetchUserData(): Promise<ApiResponse<User> | ApiErrorResponse> {
+export async function fetchUserData(): Promise<ApiResponse<User>> {
     try {
         return await NetworkController.request<ApiResponse<User>>({
             url: "/api/v1/users/me",
@@ -76,7 +74,7 @@ export async function fetchUserData(): Promise<ApiResponse<User> | ApiErrorRespo
     } catch (error) {
         if (error instanceof ApiErrorResponse) {
             const userFriendlyMessage = getUserFriendlyError(error.message);
-            return new ApiErrorResponse(
+            throw new ApiErrorResponse(
                 userFriendlyMessage,
                 error.statusCode,
                 error.instance,
