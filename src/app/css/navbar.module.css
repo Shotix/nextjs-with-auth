@@ -1,0 +1,184 @@
+/* Base container for the navbar */
+.navbar {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align items to the left when expanded */
+    color: var(--dark-color);
+
+    /* Control the width here. We’ll animate from “expandedWidth” to “collapsedWidth”. */
+    width: 240px;
+    height: 100vh;
+    padding: 1rem;
+
+    transition: width 0.4s ease, padding 0.4s ease;
+    box-shadow: 2px 2px 8px 0 var(--navbar-shadow);
+}
+
+@media (prefers-color-scheme: dark) {
+    .navbar {
+        box-shadow: -2px -2px 8px 0 var(--navbar-shadow);
+    }
+}
+
+.collapsed {
+    width: 72px; /* shrinks to a narrower sidebar */
+    padding: 1rem 0.5rem;
+}
+
+/* Profile section at top */
+.profile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    overflow: hidden; /* So we can hide text when collapsed */
+    transition: margin 0.4s ease;
+}
+
+/* Avatar image */
+.avatar {
+    border-radius: 50%;
+    object-fit: cover;
+    /* Optionally add a small box-shadow or border */
+}
+
+/* Profile name container */
+.name {
+    margin-left: 0.75rem;
+    /* Slide/fade effect for the text portion when toggling */
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+/* Hide the name label if collapsed */
+.navbar.collapsed .name {
+    opacity: 0;
+    transform: translateX(-10px);
+    pointer-events: none; /* text won't occupy space or receive clicks */
+}
+
+/* Horizontal separator */
+.hr {
+    width: 100%;
+    border: 1px solid var(--dark-color);
+    border-top: #000;
+    margin: 1rem 0;
+}
+
+/* Main nav section */
+.main {
+    flex: 1; /* push the 'others' section down */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Single nav item row */
+.navItem {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: background 0.3s ease;
+}
+
+.navItem:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+/* Icon container */
+.navIcon {
+    font-size: 1.25rem;
+    margin-right: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    min-width: 24px;
+    /* If you want to color icons differently from text, you can do so here. */
+}
+
+.navIcon.collapsed {
+    margin-right: 0; /* Remove margin when collapsed */
+}
+
+/* Text next to the icon */
+.navText {
+    font-size: 1rem;
+    transition: opacity 0.3s, transform 0.3s;
+    opacity: 1;
+    transform: translateX(0);
+    white-space: nowrap; /* So text doesn’t wrap in narrow widths */
+}
+
+/* Collapsed state hides the text */
+.navbar.collapsed .navText {
+    opacity: 0;
+    transform: translateX(-10px);
+    pointer-events: none;
+}
+
+/* 
+   OPTIONAL: Show a small tooltip on hover when collapsed.
+   This is just a single approach; you can refine for your needs.
+*/
+.navbar.collapsed .navItem:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 100%;
+    margin-left: 8px;
+    background: var(--dark-color);
+    color: var(--light-color);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeTooltip 0.3s forwards;
+}
+
+@keyframes fadeTooltip {
+    to {
+        opacity: 1;
+    }
+}
+
+/* "Others" section for settings, help, etc. */
+.others {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Toggler button to expand/collapse the navbar */
+.toggle {
+    position: absolute;
+    top: 2rem;
+    right: -1rem; /* Move it so it sits on the edge in expanded mode */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 25%;
+    cursor: pointer;
+    background: var(--secondary-color);
+    color: var(--light-color);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: transform 0.3s, right 0.4s;
+}
+
+/* Shift it slightly in collapsed mode to remain visible */
+.navbar.collapsed .toggle {
+    right: -1.25rem;
+}
+
+/* Hover effect on the toggle button */
+.toggle:hover {
+    transform: scale(1.05);
+}
