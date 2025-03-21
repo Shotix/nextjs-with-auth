@@ -18,7 +18,8 @@
     --border-color: rgba(0, 0, 0, 0.1);
     
     --navbar-shadow: rgba(0, 0, 0, 0.2);
-    --navbar-color: var(--light-color);
+    --navbar-color: #F9FAFB;
+    --navbar-hover: rgba(0, 0, 0, 0.1);
 }
 
 /* Dark mode adjustments */
@@ -39,5 +40,7 @@
         --border-color: rgba(255, 255, 255, 0.4);
         
         --navbar-shadow: rgba(255, 255, 255, 0.8);
+        --navbar-color: #1F2937;
+        --navbar-hover: rgba(255, 255, 255, 0.1);
     }
 }

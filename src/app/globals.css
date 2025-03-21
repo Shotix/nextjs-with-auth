@@ -13,12 +13,13 @@ body {
     background: var(--background);
 }
 
+main {
+    flex-grow: 1;
+    padding: 35px;
+    color: var(--foreground);
+}
+
 .app-container {
     display: flex;
     height: 100vh;
-}
-
-main {
-    flex-grow: 1;
-    padding: 20px;
 }
