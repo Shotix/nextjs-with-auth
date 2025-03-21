@@ -10,6 +10,7 @@ import { QueryClient } from "@tanstack/query-core";
 import { UserProvider } from "@/contexts/UserContext";
 import Navbar from "@/app/components/ui/Navbar";
 import { Inter } from 'next/font/google'
+import {usePathname} from "next/navigation";
 
 const queryClient = new QueryClient();
 const inter = Inter({ subsets: ['latin'] })
@@ -19,18 +20,29 @@ export default function RootLayout({
                                    }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const pathname = usePathname();
+    const isLoginPage = pathname === "/login";
+    const isRegisterPage = pathname === "/register";
+    
     return (
         <html lang="en" className={inter.className}>
         <body>
         <AuthProvider>
             <ProtectedRoute>
                 <QueryClientProvider client={queryClient}>
-                    <UserProvider>
-                        <div className="app-container">
-                            <Navbar />
-                            <main>{children}</main>
-                        </div>
-                    </UserProvider>
+                    {(isLoginPage || isRegisterPage) && (
+                        <main>
+                            {children}
+                        </main>
+                    )}
+                    {(!isLoginPage && !isRegisterPage) && (
+                        <UserProvider>
+                            <div className="app-container">
+                                <Navbar />
+                                <main>{children}</main>
+                            </div>
+                        </UserProvider>
+                    )}
                     <ReactQueryDevtools initialIsOpen={false} />
                 </QueryClientProvider>
             </ProtectedRoute>

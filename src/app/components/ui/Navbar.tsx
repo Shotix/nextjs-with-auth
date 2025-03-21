@@ -4,9 +4,17 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { FaHome, FaCaretLeft, FaCaretRight } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
+import { TbLogout } from "react-icons/tb";
 import styles from "../../css/navbar.module.css";
+import {useUser} from "@/contexts/UserContext";
+import {useAuth} from "@/contexts/AuthContext";
+import {useRouter} from "next/navigation";
 
 export default function Navbar() {
+    const { user } = useUser();
+    const { logout } = useAuth();
+    const router = useRouter();
+    
     const [collapsed, setCollapsed] = useState(false);
     const toggleNavbar = () => setCollapsed((prev) => !prev);
 
@@ -22,19 +30,21 @@ export default function Navbar() {
                 />
                 {!collapsed && (
                     <span className={styles.name}>
-            <p>Shrinithi Murali</p>
-            <p>Software Engineer</p>
-          </span>
+                        <p>{user?.username}</p>
+                    </span>
                 )}
             </section>
 
             <hr className={styles.hr} />
 
             <section className={styles.main}>
-                <div className={styles.navItem}>
-          <span className={styles.navIcon}>
-            <FaHome />
-          </span>
+                <div 
+                    className={styles.navItem} 
+                    onClick={() => router.push("/")}
+                >
+                    <span className={styles.navIcon}>
+                        <FaHome />
+                    </span>
                     {!collapsed && <span className={styles.navText}>Dashboard</span>}
                 </div>
                 {/* Add more nav items here */}
@@ -43,19 +53,37 @@ export default function Navbar() {
             <hr className={styles.hr} />
 
             <section className={styles.others}>
-                <div className={styles.navItem}>
-          <span className={styles.navIcon}>
-            <FaGear />
-          </span>
+                <div 
+                    className={styles.navItem}
+                    onClick={() => router.push("/settings")}
+                >
+                    <span className={styles.navIcon}>
+                        <FaGear />
+                    </span>
                     {!collapsed && <span className={styles.navText}>Settings</span>}
                 </div>
-                {/* Additional items like help or logout can be added */}
+                <div 
+                    className={styles.navItem}
+                    onClick={logout}
+                >
+                    <span className={styles.navIcon}>
+                        <TbLogout />
+                    </span>
+                    {!collapsed && <span className={styles.navText}>Logout</span>}
+                </div>
             </section>
 
             <button className={styles.toggle} onClick={toggleNavbar}>
-        <span className={`${styles.navIcon} ${collapsed ? styles.collapsed : ""}`}>
-          {collapsed ? <FaCaretRight /> : <FaCaretLeft />}
-        </span>
+                {collapsed && (
+                    <span className={styles.navCollapseIconCollapsed}>
+                        <FaCaretRight/>
+                    </span>
+                )}
+                {!collapsed && (
+                    <span className={styles.navCollapseIcon}>
+                        <FaCaretLeft/>
+                    </span>
+                )}
             </button>
         </nav>
     );
