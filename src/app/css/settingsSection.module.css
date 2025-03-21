@@ -1,0 +1,53 @@
+.settingsSection {
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 3px 15px rgba(79, 70, 229, 0.3);
+}
+
+.sectionHeader {
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    color: var(--light-color);
+    padding: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.3s ease;
+}
+
+.headerTitle {
+    margin: 0;
+}
+
+.sectionHeaderIcon {
+    transition: transform 0.3s ease;
+}
+
+/* When not expanded */
+.notRotated {
+    transform: rotate(0deg);
+}
+
+/* When collapsed (rotated icon) */
+.rotated {
+    transform: rotate(-90deg);
+}
+
+.sectionContent {
+    overflow: hidden;
+    background: var(--background);
+    transition: max-height 0.5s ease, padding 0.5s ease;
+}
+
+/* Expanded state */
+.expanded {
+    max-height: 500px;
+    padding: 1rem;
+}
+
+/* Collapsed state */
+.collapsed {
+    max-height: 0;
+    padding: 0 1rem;
+}

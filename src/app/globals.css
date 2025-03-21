@@ -23,3 +23,21 @@ main {
     display: flex;
     height: 100vh;
 }
+
+
+/* Default typography styling */
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+p {
+    font-size: 1rem;
+}
