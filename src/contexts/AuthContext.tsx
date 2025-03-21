@@ -56,6 +56,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const response = await loginRequest(username, password);
             if (response instanceof ApiErrorResponse) {
                 handleAuthError(response.message);
+                setLoginLoading(false);
                 return response;
             }
             const token = response.data;
