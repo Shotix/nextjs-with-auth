@@ -1,6 +1,10 @@
 interface User {
-    id: number,
     username: string,
+    userSettings: UserSettings,
+}
+
+interface UserSettings {
+    twoFactorEnabled: boolean,
 }
 
 
