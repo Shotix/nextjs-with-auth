@@ -1,10 +1,11 @@
-"use client";
+import React from "react";
 
-export default function Home() {
-
+const Dashboard: React.FC = () => {
     return (
-        <>
-            <p>Dashboard</p>
-        </>
-    );
+        <p>
+            Welcome to your dashboard!
+        </p>
+    )
 }
+
+export default Dashboard;
