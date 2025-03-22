@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import CustomButton from "@/app/components/ui/CustomButton";
+import CustomButton from "@/components/custom/CustomButton";
 import { useAuth } from "@/contexts/AuthContext";
 
 const LogoutButton: React.FC = () => {

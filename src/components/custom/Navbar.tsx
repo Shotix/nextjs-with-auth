@@ -5,10 +5,12 @@ import Image from "next/image";
 import { FaHome, FaCaretLeft, FaCaretRight } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
 import { TbLogout } from "react-icons/tb";
-import styles from "../../css/navbar.module.css";
+import styles from "../../app/css/navbar.module.css";
 import {useUser} from "@/contexts/UserContext";
 import {useAuth} from "@/contexts/AuthContext";
 import {useRouter} from "next/navigation";
+import { UserOutlined } from '@ant-design/icons';
+import { Avatar, Badge, Space } from 'antd';
 
 export default function Navbar() {
     const { user } = useUser();
@@ -21,13 +23,7 @@ export default function Navbar() {
     return (
         <nav className={`${styles.navbar} ${collapsed ? styles.collapsed : ""}`}>
             <section className={styles.profile}>
-                <Image
-                    src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1976&auto=format&fit=crop&ixlib=rb-4.0.3"
-                    alt="avatar"
-                    width={45}
-                    height={45}
-                    className={styles.avatar}
-                />
+                <Avatar size={40} icon={<UserOutlined/>}/>
                 {!collapsed && (
                     <span className={styles.name}>
                         <p>{user?.username}</p>
