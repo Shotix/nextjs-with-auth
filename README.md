@@ -7,6 +7,7 @@ This project serves as a basic starter template for a NextJS / React application
 - **NextJS**: A React framework for server-side rendering and static site generation.
 - **React**: A JavaScript library for building user interfaces.
 - **Authentication**: Login and register functionality integrated with the backend.
+- **Ease of Use**: Simple and clean codebase to get you started quickly with the usage of different ui libraries like antd and shadcn.
 - **Seamless Integration**: Designed to work with my [springboot-with-auth](https://github.com/Shotix/springboot-with-auth) project
 
 ## Getting Started
@@ -34,6 +35,12 @@ This project serves as a basic starter template for a NextJS / React application
     ```bash
     yarn install
     ```
+   
+4. Install the shadcn ui design library components:
+    ```bash
+    npx shadcn@latest add input-otp
+    ```
+   
 
 ### Running the Project
 
