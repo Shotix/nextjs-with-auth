@@ -1,33 +1,59 @@
 "use client";
 import React, { useState } from "react";
-import SettingsSection from "@/app/components/ui/SettingsSection";
+import SettingsSection from "@/components/ant-design/SettingsSection";
 import styles from "./SettingsPage.module.css";
-import ToggleSwitchDisabled from "@/app/components/ui/ToggleSwitchDisabled";
+import {useUser} from "@/contexts/UserContext";
+import ToggleSwitch from "@/components/ant-design/ToggleSwitch";
 
 const SettingsPage: React.FC = () => {
-    // State for each settings category
-    const [twoFactorAuth, setTwoFactorAuth] = useState(false);
-    const [twoFactorAuthDisabled, setTwoFactorAuthDisabled] = useState(false);
+    const { user } = useUser();
     
-    const handleTwoFactorAuth = (checked: boolean) => {
-        setTwoFactorAuth(checked);
+    const [twoFactorAuthEnabled, setTwoFactorAuthEnabled] = useState(!!user?.userSettings.twoFactorEnabled);
+    const [twoFactorAuthButtonDisabled, setTwoFactorAuthButtonDisabled] = useState(false);
+    const [switchLoading, setSwitchLoading] = useState(false);
+    
+    const changeTwoFactorAuth = async (enabled: boolean) => {
+        // TODO: Call function of the userContext to change the settings
+        
+        if (enabled) {
+            // TODO: Call function of the userContext to enable two factor auth
+            // Simulate a 2 second delay
+            setSwitchLoading(true);
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            setSwitchLoading(false);
+            setTwoFactorAuthButtonDisabled(true);
+        }
+        
+        setTwoFactorAuthEnabled(enabled);
     }
     
-    const handleTwoFactorAuthDisabled = (disabled: boolean) => {
-        setTwoFactorAuthDisabled(disabled);
+    const changeTwoFactorAuthButtonDisabled = async (disabled: boolean) => {
+        if (!disabled) {
+            setSwitchLoading(true);
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            setTwoFactorAuthEnabled(false)
+            setSwitchLoading(false);
+        }
+        
+        setTwoFactorAuthButtonDisabled(disabled);
     }
-    
 
     return (
         <div className={styles.settingsPage}>
             <h1 className={styles.settingsTitle}>Settings</h1>
             {/* Login Settings Section */}
-            <SettingsSection title="Login Settings">
-                <ToggleSwitchDisabled 
-                    onChange={handleTwoFactorAuth} 
-                    onDisabledChange={handleTwoFactorAuthDisabled}
-                    disabled={twoFactorAuthDisabled}
+            <SettingsSection 
+                title={"Security"} 
+                label={"Manage your security settings"}
+            >
+                <ToggleSwitch 
+                    onChange={changeTwoFactorAuth} 
+                    checked={twoFactorAuthEnabled} 
+                    disabled={twoFactorAuthButtonDisabled}
+                    loading={switchLoading}
                     switchMessage={"Two Factor Authentication"}
+                    onDisabledChange={twoFactorAuthEnabled ? changeTwoFactorAuthButtonDisabled : undefined}
+                    disabledMessage={"Disable Two Factor Authentication"}
                 />
             </SettingsSection>
         </div>
