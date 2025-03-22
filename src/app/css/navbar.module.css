@@ -3,11 +3,10 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Align items to the left when expanded */
+    align-items: flex-start;
     color: var(--dark-color);
     background: var(--navbar-color);
-
-    /* Control the width here. We’ll animate from “expandedWidth” to “collapsedWidth”. */
+    
     width: 240px;
     height: 100vh;
     padding: 1rem;
@@ -31,7 +30,7 @@
 .profile {
     display: flex;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-top: 0.5rem;
     overflow: hidden; /* So we can hide text when collapsed */
     transition: margin 0.4s ease;
 }
@@ -172,7 +171,7 @@
 /* Toggler button to expand/collapse the navbar */
 .toggle {
     position: absolute;
-    top: 2rem;
+    top: 1.85rem;
     right: -1rem; /* Sits on the edge in expanded mode */
     display: flex;
     align-items: center;
