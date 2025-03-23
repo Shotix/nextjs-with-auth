@@ -16,7 +16,7 @@ body {
 main {
     flex-grow: 1;
     padding: 35px;
-    color: var(--foreground);
+    color: var(--foreground) !important;
 }
 
 .app-container {
@@ -40,4 +40,18 @@ h2 {
 
 p {
     font-size: 1rem;
+}
+
+
+/* Special Ant-Design styles */
+.ant-divider-inner-text {
+    color: var(--foreground) !important;
+}
+
+.ant-divider {
+    border-color: var(--foreground) !important;
+}
+
+.ant-collapse-header {
+    color: var(--foreground) !important;
 }
