@@ -15,7 +15,7 @@ body {
 
 main {
     flex-grow: 1;
-    padding: 35px;
+    padding: 1rem 2rem;
     color: var(--foreground) !important;
 }
 
@@ -60,12 +60,20 @@ p {
     color: var(--foreground) !important;
 }
 
+.ant-collapse-content {
+    background-color: var(--light-color) !important;
+}
+
+.ant-collapse-content-box {
+    color: var(--text-color) !important;
+}
+
 
 @layer base {
-  * {
-    @apply border-border;
+    * {
+        @apply border-border;
     }
-  body {
-    @apply bg-background text-foreground;
+    body {
+        @apply bg-background text-foreground;
     }
 }
