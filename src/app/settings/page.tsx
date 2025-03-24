@@ -100,6 +100,10 @@ const SettingsPage: React.FC = () => {
                 okButtonProps={okButtonProps} 
                 value={twoFactorAuthValue} 
                 setOTPValue={setOTPValue}
+                qrCodeStatus={"active"}
+                qrCodeErrorLevel={"H"}
+                qrCodeValue={"https://google.com"}
+                qrStatusOnRefresh={() => {console.log("REFRESH")}}
             />
         </div>
     );
