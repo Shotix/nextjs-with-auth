@@ -67,6 +67,7 @@ const SettingsPage: React.FC = () => {
             setIsOtpValid(false);
             return;
         }
+
         setIsVerifying(true);
 
         // Simulate an API call to verify code
@@ -75,7 +76,7 @@ const SettingsPage: React.FC = () => {
             setIsVerifying(false);
             setIsOtpValid(true);
             setIsOkDisabled(false);
-        }, 1500);
+        }, 2000);
     };
 
     /**
