@@ -10,6 +10,10 @@ interface AuthModalProps {
     okButtonProps: {disabled: boolean};
     value: string;
     setOTPValue: (value: string) => void;
+    qrCodeValue: string;
+    qrCodeErrorLevel: "L" | "M" | "Q" | "H";
+    qrCodeStatus: "loading" | "expired" | "scanned" | "active"
+    qrStatusOnRefresh: () => void;
 }
 
 
@@ -20,7 +24,11 @@ const AuthModal:React.FC<AuthModalProps> = ({
     confirmLoading,
     okButtonProps,
     value,
-    setOTPValue
+    setOTPValue,
+    qrCodeValue,
+    qrCodeErrorLevel,
+    qrCodeStatus,
+    qrStatusOnRefresh
                                             }) => {
     return (
         <Modal
@@ -38,8 +46,10 @@ const AuthModal:React.FC<AuthModalProps> = ({
                 </p>
 
                 <QRCode
-                    errorLevel={"H"}
-                    value={"https://www.google.com"}
+                    errorLevel={qrCodeErrorLevel}
+                    value={qrCodeValue}
+                    status={qrCodeStatus}
+                    onRefresh={qrStatusOnRefresh}
                 />
 
                 <InputOTP
