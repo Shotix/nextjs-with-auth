@@ -4,6 +4,7 @@ import SettingsSection from "@/components/ant-design/SettingsSection";
 import styles from "./SettingsPage.module.css";
 import {useUser} from "@/contexts/UserContext";
 import ToggleSwitch from "@/components/ant-design/ToggleSwitch";
+import AuthModal from "@/components/custom/AuthModal";
 
 const SettingsPage: React.FC = () => {
     const { user } = useUser();
@@ -11,20 +12,52 @@ const SettingsPage: React.FC = () => {
     const [twoFactorAuthEnabled, setTwoFactorAuthEnabled] = useState(!!user?.userSettings.twoFactorEnabled);
     const [twoFactorAuthButtonDisabled, setTwoFactorAuthButtonDisabled] = useState(false);
     const [switchLoading, setSwitchLoading] = useState(false);
+
+    // Modal props
+    const [showModal, setShowModal] = useState(false);
+    const [confirmLoading, setConfirmLoading] = useState(false);
+    const [okButtonProps, setOkButtonProps] = useState({disabled: true});
+    const [twoFactorAuthValue, setTwoFactorAuthValue] = useState("");
+    
+    
+    const okModal = () => {
+        // TODO: Check 2FA code
+        setConfirmLoading(true)
+        
+        // For now, assume it is correct
+        setTimeout(() => {
+            setConfirmLoading(false);
+            setShowModal(false);
+            setSwitchLoading(false)
+            setTwoFactorAuthEnabled(true);
+            setTwoFactorAuthButtonDisabled(true);
+            setOTPValue("");
+        }, 2000)
+    }
+    
+    const setOTPValue = (value: string) => {
+        setTwoFactorAuthValue(value);
+        
+        if (twoFactorAuthValue.length === 5) {
+            setOkButtonProps({disabled: false});
+        } else {
+            setOkButtonProps({disabled: true});
+        }
+    }
+    
+    const cancelModal = () => {
+        setShowModal(false);
+        setSwitchLoading(false);
+        setTwoFactorAuthEnabled(false);
+        setOTPValue("");
+        setOkButtonProps({disabled: true});
+    }
     
     const changeTwoFactorAuth = async (enabled: boolean) => {
-        // TODO: Call function of the userContext to change the settings
-        
         if (enabled) {
-            // TODO: Call function of the userContext to enable two factor auth
-            // Simulate a 2 second delay
             setSwitchLoading(true);
-            await new Promise((resolve) => setTimeout(resolve, 2000));
-            setSwitchLoading(false);
-            setTwoFactorAuthButtonDisabled(true);
-        }
-        
-        setTwoFactorAuthEnabled(enabled);
+            setShowModal(true);
+        } 
     }
     
     const changeTwoFactorAuthButtonDisabled = async (disabled: boolean) => {
@@ -56,6 +89,18 @@ const SettingsPage: React.FC = () => {
                     disabledMessage={"Disable Two Factor Authentication"}
                 />
             </SettingsSection>
+
+
+            {/* Modal */}
+            <AuthModal 
+                showModal={showModal} 
+                okModal={okModal} 
+                cancelModal={cancelModal} 
+                confirmLoading={confirmLoading} 
+                okButtonProps={okButtonProps} 
+                value={twoFactorAuthValue} 
+                setOTPValue={setOTPValue}
+            />
         </div>
     );
 };
