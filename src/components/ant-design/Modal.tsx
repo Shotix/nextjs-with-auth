@@ -13,6 +13,7 @@ interface ModalProps {
     confirmLoading?: boolean,
     onCancel: () => void,
     items?: never,
+    children: React.ReactNode,
     position?: 'center'
     width?: number
 }
@@ -47,7 +48,9 @@ const ModalComponent: React.FC<ModalProps> = ({
             centered={position === 'center'}
             width={width}
         >
-            <p>Test</p>
+            <>
+                {children}
+            </>
         </Modal>
     )
 }
