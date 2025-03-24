@@ -42,6 +42,10 @@ p {
     font-size: 1rem;
 }
 
+.error {
+    color: var(--error);
+}
+
 
 /* Special Ant-Design styles */
 .ant-divider-inner-text {

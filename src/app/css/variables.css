@@ -5,6 +5,8 @@
     --primary-color: #4F46E5; /* Indigo */
     --secondary-color: #10B981; /* Emerald */
     --accent-color: #F59E0B; /* Amber */
+    
+    --error: #EF4444; /* Red */
 
     /* Neutral palette */
     --light-color: #F9FAFB;
@@ -30,6 +32,8 @@
         --secondary-color: #34D399;
         --accent-color: #FBBF24;
 
+        --error: #EF4444;
+        
         --light-color: #1F2937;
         --dark-color: #F3F4F6;
         --background: #111827;
