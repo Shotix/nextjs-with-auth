@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Modal, QRCode, Space } from "antd";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import {REGEXP_ONLY_DIGITS} from "input-otp";
+import {QRStatus} from "antd/es/qr-code/interface";
 
 interface AuthModalProps {
     showModal: boolean;
@@ -15,7 +16,7 @@ interface AuthModalProps {
     onOtpChange: (value: string) => void;
     qrCodeValue: string;
     qrCodeErrorLevel: "L" | "M" | "Q" | "H";
-    qrCodeStatus: "loading" | "expired" | "scanned" | "active";
+    qrCodeStatus: QRStatus;
     onQrRefresh: () => void;
 }
 

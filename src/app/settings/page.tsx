@@ -5,6 +5,7 @@ import styles from "./SettingsPage.module.css";
 import { useUser } from "@/contexts/UserContext";
 import ToggleSwitch from "@/components/ant-design/ToggleSwitch";
 import AuthModal from "@/components/custom/AuthModal";
+import {QRStatus} from "antd/es/qr-code/interface";
 
 const SettingsPage: React.FC = () => {
     const { user } = useUser();
@@ -20,6 +21,10 @@ const SettingsPage: React.FC = () => {
 
     // Modal Control
     const [showModal, setShowModal] = useState(false);
+    
+    // QR Code States
+    const [qrCodeValue, setQRCodeValue] = useState("");
+    const [qrCodeStatus, setQRCodeStatus] = useState<QRStatus>("active" as QRStatus);
 
     // OTP Verification States
     const [otpCode, setOtpCode] = useState("");
@@ -99,6 +104,17 @@ const SettingsPage: React.FC = () => {
         setOtpCode("");
     };
 
+    /**
+     * Requesting a QR Code from the backend 
+     */
+    const requestOTPQRCodeData = () => {
+        setQRCodeStatus("loading");
+        setTimeout(() => {
+            setQRCodeValue("https://google.com");
+            setQRCodeStatus("active");
+        }, 2000);
+    }
+
     // ─────────────────────────────────────────────────────────────
     //  RENDER
     // ─────────────────────────────────────────────────────────────
@@ -136,7 +152,7 @@ const SettingsPage: React.FC = () => {
                 onOtpChange={setOtpCode}
                 qrCodeValue="https://google.com"
                 qrCodeErrorLevel="H"
-                qrCodeStatus="active"
+                qrCodeStatus={qrCodeStatus}
                 onQrRefresh={() => console.log("REFRESH")}
             />
         </div>
