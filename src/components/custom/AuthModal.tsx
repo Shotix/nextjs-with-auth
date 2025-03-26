@@ -17,6 +17,7 @@ interface AuthModalProps {
     qrCodeValue: string;
     qrCodeErrorLevel: "L" | "M" | "Q" | "H";
     qrCodeStatus: QRStatus;
+    qrCodeTimeToLive: number;
     onQrRefresh: () => void;
 }
 
@@ -33,6 +34,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
                                                  qrCodeValue,
                                                  qrCodeErrorLevel,
                                                  qrCodeStatus,
+                                                 qrCodeTimeToLive,
                                                  onQrRefresh,
                                              }) => {
     // We can track whether the "Verify" button is enabled based on code length.
@@ -64,6 +66,12 @@ const AuthModal: React.FC<AuthModalProps> = ({
                     status={qrCodeStatus}
                     onRefresh={onQrRefresh}
                 />
+
+                {qrCodeStatus === "active" && (
+                    <p>
+                        This QR code will expire in {qrCodeTimeToLive} seconds.
+                    </p>
+                )}
 
                 <Space direction="horizontal">
                     <InputOTP

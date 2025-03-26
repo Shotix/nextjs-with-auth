@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import SettingsSection from "@/components/ant-design/SettingsSection";
 import styles from "./SettingsPage.module.css";
 import { useUser } from "@/contexts/UserContext";
@@ -23,14 +23,59 @@ const SettingsPage: React.FC = () => {
     const [showModal, setShowModal] = useState(false);
     
     // QR Code States
-    const [qrCodeValue, setQRCodeValue] = useState("");
+    const [qrCodeValue, setQRCodeValue] = useState("https://google.com");
     const [qrCodeStatus, setQRCodeStatus] = useState<QRStatus>("active" as QRStatus);
+    const [qrQRCodeTimeToLive, setQRCodeTimeToLive] = useState<number>(30);
 
     // OTP Verification States
     const [otpCode, setOtpCode] = useState("");
     const [isVerifying, setIsVerifying] = useState(false);
     const [isOtpValid, setIsOtpValid] = useState(true);
     const [isOkDisabled, setIsOkDisabled] = useState(true);
+
+
+
+    // ─────────────────────────────────────────────────────────────
+    //  QR CODE TTL / COUNTDOWN
+    // ─────────────────────────────────────────────────────────────
+    /**
+     * Every time the modal opens with an "active" QR, we start a timer that decrements
+     * the countdown. If countdown hits 0, we set the QR status to "expired".
+     */
+    useEffect(() => {
+        if (showModal && qrCodeStatus === "active") {
+            // Reset countdown each time we re-activate the QR or re-open the modal
+            setQRCodeTimeToLive(30);
+
+            const timer = setInterval(() => {
+                setQRCodeTimeToLive((prev) => {
+                    console.log(prev);
+                    if (prev <= 1) {
+                        clearInterval(timer);
+                        setQRCodeStatus("expired");
+                        return 0;
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
+
+            // Cleanup the interval if modal closes or status changes
+            return () => clearInterval(timer);
+        }
+    }, [showModal, qrCodeStatus]);
+
+    /**
+     * This is called when the user clicks “Refresh” in the AuthModal’s QR code
+     * (or anywhere else you want them to request a new key from the backend).
+     */
+    const handleQrRefresh = () => {
+        // Here you would do an API call to get a fresh secret from your backend
+        // and update the `qrCodeValue` with that new secret.
+        // For now, we’ll just simulate a refresh by setting the code and resetting the status:
+        setQRCodeStatus("active");
+        setQRCodeTimeToLive(30);
+    };
+    
 
     // ─────────────────────────────────────────────────────────────
     //  EVENT HANDLERS
@@ -42,6 +87,7 @@ const SettingsPage: React.FC = () => {
     const handleToggleTwoFactor = (shouldEnable: boolean) => {
         if (shouldEnable) {
             // Start enabling 2FA → show modal for the OTP
+            requestOTPQRCodeData();
             setIsEnabling2FA(true);
             setShowModal(true);
             setIsOkDisabled(true);
@@ -150,10 +196,11 @@ const SettingsPage: React.FC = () => {
                 isOkDisabled={isOkDisabled}
                 otpCode={otpCode}
                 onOtpChange={setOtpCode}
-                qrCodeValue="https://google.com"
+                qrCodeValue={qrCodeValue}
                 qrCodeErrorLevel="H"
                 qrCodeStatus={qrCodeStatus}
-                onQrRefresh={() => console.log("REFRESH")}
+                qrCodeTimeToLive={qrQRCodeTimeToLive}
+                onQrRefresh={handleQrRefresh}
             />
         </div>
     );
