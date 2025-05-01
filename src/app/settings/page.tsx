@@ -93,7 +93,7 @@ const SettingsPage: React.FC = () => {
             setIsOkDisabled(true);
             setOtpCode("");
         } else {
-            // Simply disable 2FA (no modal needed, unless you want confirmation)
+            // Disable 2FA (no modal needed, unless you want confirmation)
             disableTwoFactorAuth();
         }
     };
