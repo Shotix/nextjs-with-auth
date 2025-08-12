@@ -8,7 +8,6 @@ import {QueryClientProvider} from "@tanstack/react-query";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import {QueryClient} from "@tanstack/query-core";
 import {UserProvider} from "@/contexts/UserContext";
-import {usePathname} from "next/navigation";
 
 const queryClient = new QueryClient;
 
