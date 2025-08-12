@@ -8,6 +8,7 @@ import {QueryClientProvider} from "@tanstack/react-query";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import {QueryClient} from "@tanstack/query-core";
 import {UserProvider} from "@/contexts/UserContext";
+import {usePathname} from "next/navigation";
 
 const queryClient = new QueryClient;
 
@@ -16,18 +17,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
     return (
         <html lang="en">
         <body>
         <AuthProvider>
-            <ProtectedRoute>
-                <QueryClientProvider client={queryClient}>
-                    <UserProvider>
-                        <main>{children}</main>
-                    </UserProvider>
-                    <ReactQueryDevtools initialIsOpen={false}/>
-                </QueryClientProvider>
-            </ProtectedRoute>
+            <QueryClientProvider client={queryClient}>
+                <UserProvider>
+                    <ProtectedRoute>
+                        <main>
+                            {children}
+                        </main>
+                        <ReactQueryDevtools initialIsOpen={false}/>
+                    </ProtectedRoute>
+                </UserProvider>
+            </QueryClientProvider>
         </AuthProvider>
         </body>
         </html>

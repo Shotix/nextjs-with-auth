@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { loginRequest, registerRequest } from "@/services/userData";
+import {loginRequest, logoutRequest, registerRequest} from "@/services/userData";
 import { ApiErrorResponse } from "@/data/ApiErrorResponse";
 import { ApiResponse } from "@/data/interfaces";
 import { setAccessToken as setGlobalAccessToken } from "@/utils/authStore";
@@ -31,14 +31,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const router = useRouter();
 
     useEffect(() => {
+        let isMounted = true;
         setLoading(true);
-        refreshAccessToken().then((success) => {
-            if (success) {
-                setIsAuthenticated(true);
-            }
-            setLoading(false);
-        });
+        refreshAccessToken()
+            .then(() => {
+                if (isMounted) {
+
+                }
+            })
+            .catch(() => {
+            })
+            .finally(() => {
+                if (isMounted) {
+                    setLoading(false);
+                }
+            });
+        return () => { isMounted = false; };
     }, []);
+
 
     const handleAuthError = (message: string): void => {
         setIsAuthenticated(false);
@@ -56,6 +66,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const response = await loginRequest(username, password);
             if (response instanceof ApiErrorResponse) {
                 handleAuthError(response.message);
+                setLoginLoading(false);
                 return response;
             }
             const token = response.data;
@@ -98,28 +109,42 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const refreshAccessToken = async (): Promise<boolean> => {
         try {
-            const res = await refreshAccessTokenRequest();
-            if (!res) {
+            const token = await refreshAccessTokenRequest(); // Assuming this returns the token string or null/throws
+            if (token) {
+                setAccessToken(token);
+                setGlobalAccessToken(token); // if you use a global store for the token too
+                setIsAuthenticated(true);
+                return true;
+            } else {
                 setAccessToken(null);
+                setGlobalAccessToken(null);
                 setIsAuthenticated(false);
                 return false;
             }
-            setAccessToken(res);
-            setGlobalAccessToken(res);
-            return true;
         } catch (error) {
             console.error("Refresh access token error:", error);
             setAccessToken(null);
+            setGlobalAccessToken(null);
             setIsAuthenticated(false);
             return false;
         }
     };
 
-    const logout = () => {
-        setAccessToken(null);
-        setGlobalAccessToken(null);
-        setIsAuthenticated(false);
-        router.push("/");
+    const logout = async () => {
+        try {
+            const response = await logoutRequest();
+            // We should never get an error here, but just in case
+            if (response instanceof ApiErrorResponse) {
+                handleAuthError(response.message);
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setAccessToken(null);
+            setGlobalAccessToken(null);
+            setIsAuthenticated(false);
+            router.push("/");
+        }
     };
 
     return (

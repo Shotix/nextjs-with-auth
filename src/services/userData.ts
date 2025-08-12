@@ -85,3 +85,25 @@ export async function fetchUserData(): Promise<ApiResponse<User>> {
         }
     }
 }
+
+export async function logoutRequest(): Promise<ApiResponse<string> | ApiErrorResponse> {
+    try {
+        return await NetworkController.request<ApiResponse<string>>({
+            url: "/api/v1/users/logout",
+            method: "POST",
+            needJwtToken: true,
+        });
+    } catch (error) {
+        if (error instanceof ApiErrorResponse) {
+            const userFriendlyMessage = getUserFriendlyError(error.message);
+            return new ApiErrorResponse(
+                userFriendlyMessage,
+                error.statusCode,
+                error.instance,
+                error.errors
+            );
+        } else {
+            throw error;
+        }
+    }
+}
